@@ -1,5 +1,5 @@
 CREATE DATABASE IF NOT EXISTS `GETURBONDS`;
-GRANT ALL PRIVILEGES ON GETURBONDS.* TO 'Jaysql'@'%';
+GRANT ALL PRIVILEGES ON GETURBONDS.* TO 'jaysql'@'%';
 
 USE `GETURBONDS`;
 
@@ -39,7 +39,8 @@ COMMENT = '스크랩테이블';
 
 CREATE TABLE IF NOT EXISTS tbl_cpi
 (
-rate_id   VARCHAR(10) COMMENT '금리결정일',
+rate_id   VARCHAR(10) COMMENT '금리결정월',
+-- rate_id is same as the month of the those CPI released.
 cpi   DOUBLE NOT NULL COMMENT '소비자물가지수',
 CONSTRAINT pk_rate_id PRIMARY KEY (rate_id)
 ) ENGINE=INNODB COMMENT 'CPI테이블';
@@ -85,7 +86,7 @@ INSERT INTO tbl_like (USER_ID, BOND_CODE) VALUES
 (7, 5);
 
 INSERT INTO tbl_cpi (rate_id, cpi) VALUES
-('202508', 1.7), 
-('202506', 2.2); 
+('202508', 1.7),
+('202506', 2.2);
 
 COMMIT;
