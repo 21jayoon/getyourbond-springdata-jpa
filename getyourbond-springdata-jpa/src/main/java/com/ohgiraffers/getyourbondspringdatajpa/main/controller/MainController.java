@@ -1,13 +1,12 @@
-package com.ohgiraffers.getyourbondspringdatajpa.main.main.controller;
+package com.ohgiraffers.getyourbondspringdatajpa.main.controller;
 
-import com.ohgiraffers.getyourbondspringdatajpa.main.main.dto.BondsDTO;
-import com.ohgiraffers.getyourbondspringdatajpa.main.main.service.BondsService;
+import com.ohgiraffers.getyourbondspringdatajpa.main.dto.BondsDTO;
+import com.ohgiraffers.getyourbondspringdatajpa.main.service.BondsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 

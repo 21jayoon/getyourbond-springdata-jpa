@@ -1,26 +1,748 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>GetYourBonds</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>List of Bonds</h1>-->
+<!--    <table border="1">-->
+<!--        <tr>-->
+<!--            <th>Bond Code</th>-->
+<!--            <th>Bond Name</th>-->
+<!--            <th>Bond Type</th>-->
+<!--            <th>Bond Yield</th>-->
+<!--            <th>Bond Duration</th>-->
+<!--        </tr>-->
+<!--        <tr th:each="bonds: ${bondsList}">-->
+<!--            <td th:text="${bonds.bondCode}"></td>-->
+<!--            <td th:text="${bonds.bondName}"></td>-->
+<!--            <td th:text="${bonds.bondType}"></td>-->
+<!--            <td th:text="${bonds.bondYield}"></td>-->
+<!--            <td th:text="${#dates.format(bonds.bondDuration, 'yyyy-MM-dd')}"></td>-->
+<!--        </tr>-->
+<!--    </table>-->
+<!--</body>-->
+<!--</html>-->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>GetYourBonds</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Your BOND - 채권 투자 교육 플랫폼</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #4a5568;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab-btn:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
+        }
+
+        .tab-btn.active {
+            background: #2d3748;
+            transform: scale(1.05);
+        }
+
+        .content-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            color: #2d3748;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #4299e1;
+            padding-bottom: 10px;
+        }
+
+        .explanation-box {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-left: 4px solid #4299e1;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .simulation {
+            background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px solid #38b2ac;
+        }
+
+        .simulation h4 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #4a5568;
+            min-width: 100px;
+        }
+
+        input, select {
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+
+        .calc-btn {
+            background: linear-gradient(135deg, #38b2ac 0%, #319795 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .calc-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(56, 178, 172, 0.4);
+        }
+
+        .result {
+            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #f56565;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .bond-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .bond-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .bond-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: #4299e1;
+        }
+
+        .bond-type {
+            display: inline-block;
+            background: #4299e1;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .bond-type.government {
+            background: #38a169;
+        }
+
+        .bond-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .bond-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .yield-highlight {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #38a169;
+        }
+
+        .like-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .like-btn:hover {
+            background: #c53030;
+            transform: scale(1.1);
+        }
+
+        .like-btn.liked {
+            background: #e53e3e;
+            animation: pulse 0.3s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .comparison-table th {
+            background: #4299e1;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f7fafc;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .input-group label {
+                min-width: auto;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>List of Bonds</h1>
-    <table border="1">
-        <tr>
-            <th>Bond Code</th>
-            <th>Bond Name</th>
-            <th>Bond Type</th>
-            <th>Bond Yield</th>
-            <th>Bond Duration</th>
-        </tr>
-        <tr th:each="bonds: ${bondsList}">
-            <td th:text="${bonds.bondCode}"></td>
-            <td th:text="${bonds.bondName}"></td>
-            <td th:text="${bonds.bondType}"></td>
-            <td th:text="${bonds.bondYield}"></td>
-            <td th:text="${#dates.format(bonds.bondDuration, 'yyyy-MM-dd')}"></td>
-        </tr>
-    </table>
+<div class="container">
+    <header>
+        <h1>🏦 Get Your BOND</h1>
+        <p class="subtitle">여성을 위한 쉬운 채권투자 가이드</p>
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showSection('basics')">채권 기초</button>
+            <button class="tab-btn" onclick="showSection('types')">종류 비교</button>
+            <button class="tab-btn" onclick="showSection('calculator')">수익률 계산기</button>
+            <button class="tab-btn" onclick="showSection('bonds')">채권 목록</button>
+            <button class="tab-btn" onclick="showSection('risks')">위험도 분석</button>
+        </div>
+    </header>
+
+    <!-- 채권 기초 섹션 -->
+    <div id="basics" class="content-section active">
+        <h2 class="section-title">채권이란 무엇인가요?</h2>
+
+        <div class="explanation-box">
+            <h3>💡 간단한 정의</h3>
+            <p>채권은 정부나 회사에 돈을 빌려주고, 정해진 기간 동안 이자를 받는 투자입니다.<br>
+                친구에게 돈을 빌려주고 이자를 받기로 약속하는 것과 비슷해요.<br>
+                주식보다 안전하고 예금보다 수익률이 높은 중간 단계 투자입니다.<br>
+                매달 또는 매년 일정한 이자 수입을 얻을 수 있어요.</p>
+        </div>
+
+        <div class="explanation-box">
+            <h3>🛡️ 왜 채권이 안전할까요?</h3>
+            <p>채권은 계약서가 있어서 언제, 얼마를 받을지 정해져 있어요.<br>
+                주식처럼 가격이 매일 크게 변하지 않습니다.<br>
+                특히 정부가 발행하는 국채는 국가가 보증하므로 매우 안전해요.<br>
+                만기까지 보유하면 원금을 100% 돌려받을 수 있습니다.</p>
+        </div>
+
+        <div class="simulation">
+            <h4>📊 채권 vs 예금 비교 시뮬레이션</h4>
+            <div class="input-group">
+                <label>투자 금액:</label>
+                <input type="number" id="investment-amount" value="10000000" placeholder="투자할 금액 (원)">
+            </div>
+            <div class="input-group">
+                <label>투자 기간:</label>
+                <select id="investment-period">
+                    <option value="1">1년</option>
+                    <option value="3" selected>3년</option>
+                    <option value="5">5년</option>
+                </select>
+            </div>
+            <button class="calc-btn" onclick="compareBondVsDeposit()">비교하기</button>
+            <div id="comparison-result" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- 종류 비교 섹션 -->
+    <div id="types" class="content-section">
+        <h2 class="section-title">국채 vs 회사채 비교</h2>
+
+        <table class="comparison-table">
+            <thead>
+            <tr>
+                <th>구분</th>
+                <th>국채 (Government Bonds)</th>
+                <th>회사채 (Corporate Bonds)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><strong>발행주체</strong></td>
+                <td>대한민국 정부</td>
+                <td>일반 기업</td>
+            </tr>
+            <tr>
+                <td><strong>안전성</strong></td>
+                <td>최고 수준 (국가 보증)</td>
+                <td>회사 신용도에 따라 다름</td>
+            </tr>
+            <tr>
+                <td><strong>수익률</strong></td>
+                <td>상대적으로 낮음 (2-3%)</td>
+                <td>상대적으로 높음 (3-5%)</td>
+            </tr>
+            <tr>
+                <td><strong>추천 대상</strong></td>
+                <td>투자 초보자, 안전성 중시</td>
+                <td>어느 정도 경험이 있는 투자자</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="explanation-box">
+            <h3>🏛️ 국채 (Government Bonds)</h3>
+            <p>정부에 돈을 빌려주는 것으로 가장 안전한 투자입니다.<br>
+                국가가 망하지 않는 한 원금과 이자를 확실히 받을 수 있어요.<br>
+                수익률은 낮지만 잠을 편히 잘 수 있는 투자입니다.<br>
+                투자 초보자가 시작하기에 가장 좋은 선택이에요.</p>
+        </div>
+
+        <div class="explanation-box">
+            <h3>🏢 회사채 (Corporate Bonds)</h3>
+            <p>기업에 돈을 빌려주고 더 높은 이자를 받는 투자입니다.<br>
+                회사의 재무 상태를 미리 조사해야 안전해요.<br>
+                국채보다 수익률이 높지만 위험도 조금 더 높습니다.<br>
+                삼성, LG 같은 대기업 채권은 비교적 안전합니다.</p>
+        </div>
+    </div>
+
+    <!-- 수익률 계산기 -->
+    <div id="calculator" class="content-section">
+        <h2 class="section-title">채권 수익률 계산기</h2>
+
+        <div class="explanation-box">
+            <h3>📈 수익률과 표면금리의 차이</h3>
+            <p><strong>표면금리(쿠폰레이트):</strong> 채권에 적힌 고정 이자율<br>
+                <strong>실제 수익률:</strong> 구매 가격에 따라 달라지는 실제 수익<br>
+                액면가보다 싸게 사면 수익률이 표면금리보다 높아져요.<br>
+                액면가보다 비싸게 사면 수익률이 표면금리보다 낮아집니다.</p>
+        </div>
+
+        <div class="simulation">
+            <h4>🧮 채권 수익률 계산기</h4>
+            <div class="input-group">
+                <label>액면가:</label>
+                <input type="number" id="face-value" value="10000" placeholder="원">
+            </div>
+            <div class="input-group">
+                <label>구매가:</label>
+                <input type="number" id="purchase-price" value="9500" placeholder="원">
+            </div>
+            <div class="input-group">
+                <label>표면금리:</label>
+                <input type="number" id="coupon-rate" value="3.5" step="0.1" placeholder="%">
+            </div>
+            <div class="input-group">
+                <label>만기 (년):</label>
+                <input type="number" id="maturity-years" value="3" min="1" max="30">
+            </div>
+            <button class="calc-btn" onclick="calculateYield()">수익률 계산하기</button>
+            <div id="yield-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="explanation-box">
+            <h3>📅 만기일의 이해</h3>
+            <p>만기일은 원금을 돌려받는 날짜입니다.<br>
+                단기 (1-3년) vs 장기 (5년 이상)로 나뉩니다.<br>
+                보통 만기가 길수록 이자율이 높아요.<br>
+                만기 전에 팔 수 있지만 가격이 변할 수 있습니다.</p>
+        </div>
+    </div>
+
+    <!-- 채권 목록 -->
+    <div id="bonds" class="content-section">
+        <h2 class="section-title">현재 투자 가능한 채권</h2>
+        <p style="margin-bottom: 20px; color: #718096;">현재 사용자: <strong id="current-user">빨간 사슴</strong></p>
+
+        <div class="bond-list" id="bond-list">
+            <!-- 채권 카드들이 여기에 동적으로 생성됩니다 -->
+        </div>
+    </div>
+
+    <!-- 위험도 분석 -->
+    <div id="risks" class="content-section">
+        <h2 class="section-title">채권 투자 위험도 이해하기</h2>
+
+        <div class="explanation-box">
+            <h3>💳 신용 위험 (Credit Risk)</h3>
+            <p>빌려준 돈을 못 받을 위험입니다.<br>
+                정부 > 대기업 > 중소기업 순으로 안전해요.<br>
+                회사의 신용등급을 확인하고 투자하세요.<br>
+                여러 회사에 분산투자하면 위험을 줄일 수 있어요.</p>
+        </div>
+
+        <div class="explanation-box">
+            <h3>📊 금리 위험 (Interest Rate Risk)</h3>
+            <p>시장 금리가 오르면 채권 가격이 떨어집니다.<br>
+                금리가 내리면 채권 가격이 올라가요.<br>
+                만기까지 보유하면 금리 변동의 영향을 받지 않습니다.<br>
+                단기 채권이 장기 채권보다 금리 위험이 적어요.</p>
+        </div>
+
+        <div class="explanation-box">
+            <h3>🛒 인플레이션 위험 (Inflation Risk)</h3>
+            <p>물가상승률이 채권 수익률보다 높으면 실질 손실입니다.<br>
+                현재 CPI: <span id="current-cpi">2.2%</span><br>
+                채권 수익률이 인플레이션보다 높은지 확인하세요.<br>
+                물가연동채권을 고려해볼 수도 있어요.</p>
+        </div>
+
+        <div class="simulation">
+            <h4>⚖️ 위험도 vs 수익률 시뮬레이션</h4>
+            <div class="input-group">
+                <label>투자 성향:</label>
+                <select id="risk-preference" onchange="updateRiskAnalysis()">
+                    <option value="conservative">보수적 (안전 중시)</option>
+                    <option value="moderate">중도적 (균형 추구)</option>
+                    <option value="aggressive">공격적 (수익 중시)</option>
+                </select>
+            </div>
+            <div id="risk-recommendation" class="result"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 데이터 (SQL에서 가져온 정보를 시뮬레이션)
+    const users = [
+        { user_id: 1, user_nickname: '빨간 사슴' },
+        { user_id: 2, user_nickname: '주황 코알라' },
+        { user_id: 3, user_nickname: '노란 사마귀' },
+        { user_id: 4, user_nickname: '초록 얼룩말' },
+        { user_id: 5, user_nickname: '파란 고양이' },
+        { user_id: 6, user_nickname: '남색 판다' },
+        { user_id: 7, user_nickname: '보라 토끼' }
+    ];
+
+    const bondTypes = [
+        { type_code: 1, type_name: '국채' },
+        { type_code: 2, type_name: '회사채' }
+    ];
+
+    const bonds = [
+        { bond_code: 1, bond_name: '서울은행 차016-01', bond_type: 2, bond_yield: 3.4, bond_duration: '2026-04-01' },
+        { bond_code: 2, bond_name: '을지로건설 221-02', bond_type: 2, bond_yield: 4.2, bond_duration: '2025-12-12' },
+        { bond_code: 3, bond_name: '과거자산증권 117-03', bond_type: 2, bond_yield: 3.5, bond_duration: '2025-07-08' },
+        { bond_code: 4, bond_name: '경기카드 389', bond_type: 2, bond_yield: 3.6, bond_duration: '2025-06-12' },
+        { bond_code: 5, bond_name: '국고02400-2710', bond_type: 1, bond_yield: 2.4, bond_duration: '2027-10-17' },
+        { bond_code: 6, bond_name: '국고02800-3511', bond_type: 1, bond_yield: 2.8, bond_duration: '2035-11-19' }
+    ];
+
+    const likes = [
+        { USER_ID: 1, BOND_CODE: 2 }, { USER_ID: 1, BOND_CODE: 3 }, { USER_ID: 1, BOND_CODE: 4 },
+        { USER_ID: 2, BOND_CODE: 5 }, { USER_ID: 2, BOND_CODE: 6 },
+        { USER_ID: 3, BOND_CODE: 1 }, { USER_ID: 3, BOND_CODE: 6 },
+        { USER_ID: 4, BOND_CODE: 6 },
+        { USER_ID: 5, BOND_CODE: 1 }, { USER_ID: 5, BOND_CODE: 3 },
+        { USER_ID: 6, BOND_CODE: 2 }, { USER_ID: 6, BOND_CODE: 5 },
+        { USER_ID: 7, BOND_CODE: 3 }, { USER_ID: 7, BOND_CODE: 4 }, { USER_ID: 7, BOND_CODE: 5 }
+    ];
+
+    let currentUserId = 1; // 빨간 사슴
+    let userLikes = likes.filter(like => like.USER_ID === currentUserId).map(like => like.BOND_CODE);
+
+    // 탭 전환 함수
+    function showSection(sectionId) {
+        // 모든 섹션 숨기기
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(section => section.classList.remove('active'));
+
+        // 모든 탭 버튼 비활성화
+        const tabs = document.querySelectorAll('.tab-btn');
+        tabs.forEach(tab => tab.classList.remove('active'));
+
+        // 선택된 섹션과 탭 활성화
+        document.getElementById(sectionId).classList.add('active');
+        event.target.classList.add('active');
+
+        // 채권 목록 섹션이면 채권 카드들 로드
+        if (sectionId === 'bonds') {
+            loadBonds();
+        }
+    }
+
+    // 채권 vs 예금 비교 계산
+    function compareBondVsDeposit() {
+        const amount = parseInt(document.getElementById('investment-amount').value);
+        const years = parseInt(document.getElementById('investment-period').value);
+
+        const depositRate = 1.5; // 예금 금리 1.5% 가정
+        const bondRate = 3.0; // 평균 채권 수익률 3% 가정
+
+        const depositReturn = amount * (1 + (depositRate / 100) * years);
+        const bondReturn = amount * (1 + (bondRate / 100) * years);
+        const difference = bondReturn - depositReturn;
+
+        const resultDiv = document.getElementById('comparison-result');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `
+                <strong>📊 ${years}년 투자 결과</strong><br>
+                💰 예금 (${depositRate}%): ${depositReturn.toLocaleString()}원<br>
+                📈 채권 (${bondRate}%): ${bondReturn.toLocaleString()}원<br>
+                💡 차이: <span style="color: #38a169;">+${difference.toLocaleString()}원</span> 더 많이!
+            `;
+    }
+
+    // 수익률 계산기
+    function calculateYield() {
+        const faceValue = parseFloat(document.getElementById('face-value').value);
+        const purchasePrice = parseFloat(document.getElementById('purchase-price').value);
+        const couponRate = parseFloat(document.getElementById('coupon-rate').value);
+        const maturityYears = parseFloat(document.getElementById('maturity-years').value);
+
+        const annualCoupon = faceValue * (couponRate / 100);
+        const currentYield = (annualCoupon / purchasePrice) * 100;
+        const capitalGain = faceValue - purchasePrice;
+        const totalReturn = (annualCoupon * maturityYears) + capitalGain;
+        const totalYield = (totalReturn / purchasePrice) * 100;
+        const annualizedYield = totalYield / maturityYears;
+
+        const resultDiv = document.getElementById('yield-result');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `
+                <strong>💡 계산 결과</strong><br>
+                📊 현재수익률: ${currentYield.toFixed(2)}% (연간 이자수익)<br>
+                📈 만기수익률: ${annualizedYield.toFixed(2)}% (연평균 총수익)<br>
+                💰 만기시 총 수익: ${totalReturn.toLocaleString()}원<br>
+                ${purchasePrice < faceValue ? '🎉 할인가 구매로 추가 수익!' : '⚠️ 프리미엄 지불로 수익률 하락'}
+            `;
+    }
+
+    // 채권 목록 로드
+    function loadBonds() {
+        const bondListDiv = document.getElementById('bond-list');
+        bondListDiv.innerHTML = '';
+
+        bonds.forEach(bond => {
+            const bondType = bondTypes.find(type => type.type_code === bond.bond_type);
+            const isLiked = userLikes.includes(bond.bond_code);
+            const maturityDate = new Date(bond.bond_duration);
+            const today = new Date();
+            const daysToMaturity = Math.ceil((maturityDate - today) / (1000 * 60 * 60 * 24));
+
+            const bondCard = document.createElement('div');
+            bondCard.className = 'bond-card';
+            bondCard.innerHTML = `
+                    <div class="bond-type ${bond.bond_type === 1 ? 'government' : ''}">${bondType.type_name}</div>
+                    <div class="bond-name">${bond.bond_name}</div>
+                    <div class="bond-details">
+                        <span>수익률: <span class="yield-highlight">${bond.bond_yield}%</span></span>
+                        <span>만기: ${bond.bond_duration}</span>
+                    </div>
+                    <div class="bond-details">
+                        <span>남은 기간: ${daysToMaturity}일</span>
+                        <span>${daysToMaturity < 365 ? '단기' : '장기'}</span>
+                    </div>
+                    <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(${bond.bond_code})">
+                        ${isLiked ? '❤️' : '🤍'}
+                    </button>
+                `;
+            bondListDiv.appendChild(bondCard);
+        });
+    }
+
+    // 좋아요 토글
+    function toggleLike(bondCode) {
+        const index = userLikes.indexOf(bondCode);
+        if (index > -1) {
+            userLikes.splice(index, 1);
+        } else {
+            userLikes.push(bondCode);
+        }
+        loadBonds(); // 재로드하여 UI 업데이트
+    }
+
+    // 위험도 분석
+    function updateRiskAnalysis() {
+        const preference = document.getElementById('risk-preference').value;
+        const resultDiv = document.getElementById('risk-recommendation');
+
+        let recommendation = '';
+        switch (preference) {
+            case 'conservative':
+                recommendation = `
+                        <strong>🛡️ 보수적 투자자 추천</strong><br>
+                        📊 국채 80% + 우량 회사채 20% 포트폴리오<br>
+                        💡 예상 수익률: 2.5-3.0% (안전성 최우선)<br>
+                        ⏰ 추천 만기: 3년 이하 단기 채권
+                    `;
+                break;
+            case 'moderate':
+                recommendation = `
+                        <strong>⚖️ 균형 투자자 추천</strong><br>
+                        📊 국채 50% + 회사채 50% 포트폴리오<br>
+                        💡 예상 수익률: 3.0-3.8% (안전성과 수익성 균형)<br>
+                        ⏰ 추천 만기: 3-5년 중기 채권
+                    `;
+                break;
+            case 'aggressive':
+                recommendation = `
+                        <strong>🚀 적극적 투자자 추천</strong><br>
+                        📊 국채 20% + 회사채 80% 포트폴리오<br>
+                        💡 예상 수익률: 3.8-4.5% (수익성 최우선)<br>
+                        ⏰ 추천 만기: 5년 이상 장기 채권
+                    `;
+                break;
+        }
+        resultDiv.innerHTML = recommendation;
+    }
+
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+        updateRiskAnalysis();
+        document.getElementById('current-cpi').textContent = '2.2%';
+    });
+</script>
 </body>
 </html>

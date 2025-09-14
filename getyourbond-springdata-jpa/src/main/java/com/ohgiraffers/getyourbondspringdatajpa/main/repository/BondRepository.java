@@ -1,6 +1,6 @@
-package com.ohgiraffers.getyourbondspringdatajpa.main.main.repository;
+package com.ohgiraffers.getyourbondspringdatajpa.main.repository;
 
-import com.ohgiraffers.getyourbondspringdatajpa.main.main.entity.Bonds;
+import com.ohgiraffers.getyourbondspringdatajpa.main.entity.Bonds;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

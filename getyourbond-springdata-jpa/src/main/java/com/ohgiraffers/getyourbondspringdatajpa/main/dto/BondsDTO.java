@@ -1,4 +1,4 @@
-package com.ohgiraffers.getyourbondspringdatajpa.main.main.dto;
+package com.ohgiraffers.getyourbondspringdatajpa.main.dto;
 
 import lombok.Getter;
 import lombok.Setter;

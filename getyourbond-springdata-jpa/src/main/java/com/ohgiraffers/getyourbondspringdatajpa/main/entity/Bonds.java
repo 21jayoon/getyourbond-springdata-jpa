@@ -1,7 +1,8 @@
-package com.ohgiraffers.getyourbondspringdatajpa.main.main.entity;
+package com.ohgiraffers.getyourbondspringdatajpa.main.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,10 @@ import java.util.Date;
 @Entity(name = "MainBondEntity")
 @Table(name = "tbl_bonds")
 @Getter
+@AllArgsConstructor
+/* TODO: Download MySQl in new mac. (250913) ->Download completed following the reference below 15:37
+ https://datarian.io/blog/installing-mysql-on-a-mac */
+// TODO: Change application.yml with new sql account. 250913 16:32
 /* @Setter 지양(Setter 메소드 작성 지양) -> 객체를 언제든지 변경할 수 있으면 객체의 안전성 보장 X
  * 값 변경이 필요한 경우에는 해당 기능을 위한 메소드를 별도로 생성 */
 //@NoArgsConstructor : 기본 생성자를 만들어주세요

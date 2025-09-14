@@ -1,8 +1,8 @@
-package com.ohgiraffers.getyourbondspringdatajpa.main.main.service;
+package com.ohgiraffers.getyourbondspringdatajpa.main.service;
 
-import com.ohgiraffers.getyourbondspringdatajpa.main.main.dto.BondsDTO;
-import com.ohgiraffers.getyourbondspringdatajpa.main.main.entity.Bonds;
-import com.ohgiraffers.getyourbondspringdatajpa.main.main.repository.BondRepository;
+import com.ohgiraffers.getyourbondspringdatajpa.main.dto.BondsDTO;
+import com.ohgiraffers.getyourbondspringdatajpa.main.entity.Bonds;
+import com.ohgiraffers.getyourbondspringdatajpa.main.repository.BondRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
