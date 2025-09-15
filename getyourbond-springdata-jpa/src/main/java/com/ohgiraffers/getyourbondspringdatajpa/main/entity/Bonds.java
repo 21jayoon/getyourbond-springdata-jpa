@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Entity(name = "MainBondEntity")
+@Entity(name = "Bonds")
 @Table(name = "tbl_bonds")
 @Getter
 @AllArgsConstructor
